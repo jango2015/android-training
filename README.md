@@ -3,4 +3,4 @@ android-training
 
 ## 目录
 
-1. BitmapFun
+1. Bitmap
