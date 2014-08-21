@@ -1,8 +1,13 @@
 package vincent4j.homenotifydemo;
 
 import vincent4j.homenotifydemo.HomeWatcher.OnHomePressedListener;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onHomePressed() {
                 Log.d("4J", "Home pressed");
+                showHomeNotification();
             }
             
             @Override
@@ -40,6 +46,32 @@ public class MainActivity extends ActionBarActivity {
             }
         });
         
+    }
+    
+    private void showHomeNotification() {
+        Notification notification =
+                new NotificationCompat.Builder(this)
+//        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
+                .setSmallIcon(R.drawable.ic_stat_notify_home_pressed)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setTicker("tickerText")
+                .build();
+        
+        Intent notificationIntent = new Intent(this, getClass());
+        
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                this,
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        
+        notification.contentIntent = contentIntent;
+        // 按下之后从 Notification Draw 自动移除
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE); 
+        manager.notify(0, notification);
     }
     
     @Override
